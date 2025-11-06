@@ -1,0 +1,8 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1762449769
+::res://assets/::1762449748
+icon.svg::CompressedTexture2D::4399356303947398977::1754301331::1762449748::1::::<><><>0<>0<>05e8db2a10e761d2a49b6fcca422bedb<>res://.godot/imported/icon.svg-56083ea2a1f1a4f1e49773bdc6d7826c.ctex::
+::res://entities/::1762449769
+server.gd::GDScript::6755057942098919173::1762449376::0::1::::World<>Node<><>0<>0<><>::
+::res://entities/world/::1762449769
+world.tscn::PackedScene::795430845197111026::1762449771::0::1::::<><><>0<>0<><>::uid://c3ig215kniuv2::::res://entities/server.gd
