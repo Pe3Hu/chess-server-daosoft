@@ -1,1 +1,14 @@
+HBoxContainer
+PanelContainer
+VBoxContainer
+Label
+MarginContainer
+Button
+TextureRect
+Sprite2D
+ColorRect
+CheckButton
+CheckButton      - Matches the "toggle" keyword.
+Timer
+RichTextLabel
 Node
