@@ -6,6 +6,7 @@ extends Node
 #var referee: RefereeResource = RefereeResource.new()
 #var board: BoardResource = BoardResource.new()
 var player: PlayerResource
+var move_index: int = 0
 
 var user_color: FrameworkSettings.PieceColor = FrameworkSettings.PieceColor.WHITE:
 	set(value_):
@@ -13,11 +14,19 @@ var user_color: FrameworkSettings.PieceColor = FrameworkSettings.PieceColor.WHIT
 var active_color: FrameworkSettings.PieceColor = FrameworkSettings.PieceColor.WHITE
 var player_colors: Array[FrameworkSettings.PieceColor] = [FrameworkSettings.PieceColor.WHITE, FrameworkSettings.PieceColor.BLACK]
 
+var peer_to_fox: Dictionary
+var peer_to_opponent: Dictionary
 
 func switch_active_color() -> void:
 	var next_color_index = (player_colors.find(active_color) + 1) % player_colors.size()
 	active_color = player_colors[next_color_index]
-
+	
+func reset() -> void:
+	move_index = 0
+	
+	peer_to_fox = {}
+	#peer_to_opponent = {}
+	
 #func _init() -> void:
 	#referee.board = board
 	#board.referee = referee

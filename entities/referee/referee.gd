@@ -106,10 +106,16 @@ func apply_void_mod() -> void:
 		if !escape_piece_resources.has(move_resource.captured_piece):
 			escape_piece_resources.append(move_resource.captured_piece)
 	
+	var captured_tile_ids = []
+	
 	for piece_resource in escape_piece_resources:
 		if piece_resource.failure_on_escape_trial():
 			var piece = game.board.get_piece(piece_resource)
 			piece.capture()
+			captured_tile_ids.append(piece_resource.tile.id)
+	
+	print(captured_tile_ids.size())
+	game.world.users_recive_void_result(captured_tile_ids)
 	
 func apply_hellhorse_mod() -> void:
 	if FrameworkSettings.active_mode != FrameworkSettings.ModeType.HELLHORSE: return

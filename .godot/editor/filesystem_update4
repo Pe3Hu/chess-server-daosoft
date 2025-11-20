@@ -1,5 +1,3 @@
-res://entities/game/game.tscn
-res://entities/game/game.gd
 res://entities/world/world.tscn
+res://entities/global/framework_settings.gd
 res://entities/world/world.gd
-res://entities/global/multiplayer_manager.gd

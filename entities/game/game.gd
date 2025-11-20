@@ -4,6 +4,7 @@ extends PanelContainer
 
 signal fox_swap_pieces_finished
 
+@export var world: World
 @export var cursor: CustomCursor
 
 var resource: GameResource = GameResource.new()
