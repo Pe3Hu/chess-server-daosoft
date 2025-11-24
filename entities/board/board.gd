@@ -14,7 +14,7 @@ var resource: BoardResource:
 		init_tiles()
 		init_pieces()
 
-@onready var map_layer: TileMapLayer = %BoardMapLayer
+#@onready var map_layer: TileMapLayer = %BoardMapLayer
 @onready var tiles: Node2D = %Tiles
 @onready var pieces: Node2D = %Pieces
 
@@ -44,7 +44,12 @@ var state_tiles = [
 
 #region init
 func _ready() -> void:
-	map_layer.position = FrameworkSettings.TILE_SIZE * 0.5
+	#map_layer.position = FrameworkSettings.TILE_SIZE * 0.5
+	update_board_position()
+	
+func update_board_position() -> void:
+	%Board.position = %BoardContainer.size / 2
+	%BoardMapLayer.position = -%BoardContainer.size / 2 + FrameworkSettings.TILE_SIZE * 0.5
 	
 func init_tiles() -> void:
 	for tile_resource in resource.tiles:
@@ -81,7 +86,7 @@ func add_piece(piece_resource_: PieceResource) -> void:
 	
 func get_piece(piece_resource_: PieceResource) -> Variant:
 	if resource_to_piece.has(piece_resource_): return resource_to_piece[piece_resource_]
-	get_tree().quit()
+	#get_tree().quit()
 	return null
 	
 #endregion
@@ -213,11 +218,17 @@ func reset() -> void:
 	
 	init_pieces()
 	initial_tile_state_update()
+	
+	#if MultiplayerManager.player.color == FrameworkSettings.PieceColor.BLACK:
+		#swap_on_black_color()
+	
 	game.resource.recalc_piece_environment()
 	
 func resize() -> void:
 	%BoardContainer.size = Vector2(FrameworkSettings.BOARD_SIZE) * FrameworkSettings.TILE_SIZE
 	size = Vector2(FrameworkSettings.BOARD_SIZE + Vector2i(2, 2)) * FrameworkSettings.TILE_SIZE
+	
+	update_board_position()
 	resource.resize()
 	resource_to_piece = {}
 	update_axis()
@@ -258,7 +269,8 @@ func fox_mod_tile_state_update() -> void:
 		game.fox_swap_pieces_finished.emit()
 		return
 	
-	var player = game.referee.resource.fox_swap_players.front()
+	var player = MultiplayerManager.player
+	#var player = game.referee.resource.fox_swap_players.front()
 	
 	if player.is_bot:
 		fox_random_swap()
@@ -275,7 +287,7 @@ func set_fox_swap_tiles_as_none_state() -> void:
 		tile.resource.current_state = FrameworkSettings.TileState.NONE
 		tile.update_state()
 	
-func fox_swap(piece_for_swap_: Piece) -> void:
+func fox_swap(piece_for_swap_: Piece, is_local_: bool = true) -> void:
 	#var focus_piece = get_piece(resource.focus_tile.piece)
 	var focus_tile = get_tile(resource.focus_tile).resource
 	var swap_tile = get_tile(piece_for_swap_.resource.tile).resource
@@ -294,6 +306,9 @@ func fox_swap(piece_for_swap_: Piece) -> void:
 	
 	reset_tile_state_after_swap()
 	fox_mod_tile_state_update()
+	
+	if is_local_:
+		game.world.server_recive_fox_swap_parameters.rpc_id(1, focus_tile.id, swap_tile.id)
 	#piece_for_swap_.is_holden = false
 	
 func fox_random_swap() -> void:
@@ -304,6 +319,12 @@ func fox_random_swap() -> void:
 	resource.focus_tile = random_focus_resource.tile
 	var swap_piece = get_piece(random_swap_resource)
 	fox_swap(swap_piece)
+	
+func fox_swap_from_server(focus_tile_id_: int, swap_tile_id_: int) -> void:
+	resource.focus_tile = resource.tiles[focus_tile_id_]
+	var piece_resource = resource.tiles[swap_tile_id_].piece
+	var piece_for_swap = get_piece(piece_resource)
+	fox_swap(piece_for_swap, false)
 	
 func reset_tile_state_after_swap() -> void:
 	resource.focus_tile = null
@@ -324,6 +345,16 @@ func get_free_tile() -> Tile:
 	return option_tile
 #endregion
 
+#region void
+func apply_tile_fatigue(tile_id_: int) -> void:
+	var tile = tiles.get_child(tile_id_)
+	if tile.resource.piece == null:
+		return
+	
+	var piece = get_piece(tile.resource.piece)
+	piece.capture()
+#endregion
+
 #region hellhorse
 func show_hellhorse_pass_ask() -> void:
 	hellhorse_pass_ask.visible = true
@@ -331,6 +362,7 @@ func show_hellhorse_pass_ask() -> void:
 	
 func _on_hell_horse_yes_button_pressed() -> void:
 	game.referee.pass_turn_to_opponent()
+	game.world.server_recive_initiative_switch()
 	hellhorse_pass_ask.visible = false
 	game.on_pause = false
 	
@@ -353,4 +385,38 @@ func _on_mouse_entered() -> void:
 	
 func _on_mouse_exited() -> void:
 	game.cursor.current_state = FrameworkSettings.CursorState.IDLE
+#endregion
+
+#region user color
+func swap_on_black_color() -> void:
+	%Board.rotation_degrees = 180
+	%WhiteAxisDigits.visible = false
+	%BlackAxisDigits.visible = true
+	game.menu.start_game_button.visible = false
+	#game.menu.option_buttons.visible = false
+	
+	for mod_button in game.menu.mod_buttons:
+		mod_button.disabled = true
+	
+	for tile in tiles.get_children():
+		tile.rotation_degrees = 180
+		
+	for piece in pieces.get_children():
+		piece.rotation_degrees = 180
+	
+func swap_on_white_color() -> void:
+	%Board.rotation_degrees = 0
+	%WhiteAxisDigits.visible = true
+	%BlackAxisDigits.visible = false
+	game.menu.start_game_button.visible = true
+	#game.menu.option_buttons.visible = true
+	
+	for mod_button in game.menu.mod_buttons:
+		mod_button.disabled = false
+	
+	for tile in tiles.get_children():
+		tile.rotation_degrees = 0
+		
+	for piece in pieces.get_children():
+		piece.rotation_degrees = 0
 #endregion

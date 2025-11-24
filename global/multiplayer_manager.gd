@@ -2,15 +2,14 @@ extends Node
 
 
 
+const SERVEW_PORT: int = 9999
 #var notation: NotationResource = NotationResource.new()
 #var referee: RefereeResource = RefereeResource.new()
 #var board: BoardResource = BoardResource.new()
 var player: PlayerResource
 var move_index: int = 0
+var is_harakiri: bool = false
 
-var user_color: FrameworkSettings.PieceColor = FrameworkSettings.PieceColor.WHITE:
-	set(value_):
-		user_color = value_
 var active_color: FrameworkSettings.PieceColor = FrameworkSettings.PieceColor.WHITE
 var player_colors: Array[FrameworkSettings.PieceColor] = [FrameworkSettings.PieceColor.WHITE, FrameworkSettings.PieceColor.BLACK]
 
@@ -22,6 +21,7 @@ func switch_active_color() -> void:
 	active_color = player_colors[next_color_index]
 	
 func reset() -> void:
+	#FrameworkSettings.active_mode = FrameworkSettings.ModeType.CLASSIC
 	move_index = 0
 	
 	peer_to_fox = {}

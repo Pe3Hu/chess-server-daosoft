@@ -45,14 +45,14 @@ alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="AxisDigits" type="VBoxContainer" parent="Axis/HBoxContainer"]
+[node name="WhiteAxisDigits" type="VBoxContainer" parent="Axis/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 theme_override_constants/separation = 0
 
-[node name="DigitLabel9" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="DigitLabel9" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(32, 32)
@@ -62,7 +62,7 @@ text = "9"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label8" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="Label8" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -70,7 +70,7 @@ text = "8"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label7" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="Label7" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -78,7 +78,7 @@ text = "7"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label6" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="Label6" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -86,7 +86,7 @@ text = "6"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label5" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="Label5" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -94,7 +94,7 @@ text = "5"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label4" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="Label4" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -102,7 +102,7 @@ text = "4"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label3" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="Label3" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -110,7 +110,7 @@ text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="Label2" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -118,11 +118,91 @@ text = "2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label1" type="Label" parent="Axis/HBoxContainer/AxisDigits"]
+[node name="Label1" type="Label" parent="Axis/HBoxContainer/WhiteAxisDigits"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BlackAxisDigits" type="VBoxContainer" parent="Axis/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="Label1" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label5" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label6" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "6"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label7" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label8" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "8"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DigitLabel9" type="Label" parent="Axis/HBoxContainer/BlackAxisDigits"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "9"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -133,15 +213,18 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 
-[node name="BoardMapLayer" type="TileMapLayer" parent="Axis/HBoxContainer/BoardContainer"]
+[node name="Board" type="Node2D" parent="Axis/HBoxContainer/BoardContainer"]
 unique_name_in_owner = true
 
-[node name="Sprite2D" type="Sprite2D" parent="Axis/HBoxContainer/BoardContainer/BoardMapLayer"]
-
-[node name="Tiles" type="Node2D" parent="Axis/HBoxContainer/BoardContainer/BoardMapLayer"]
+[node name="BoardMapLayer" type="TileMapLayer" parent="Axis/HBoxContainer/BoardContainer/Board"]
 unique_name_in_owner = true
 
-[node name="Pieces" type="Node2D" parent="Axis/HBoxContainer/BoardContainer/BoardMapLayer"]
+[node name="Sprite2D" type="Sprite2D" parent="Axis/HBoxContainer/BoardContainer/Board/BoardMapLayer"]
+
+[node name="Tiles" type="Node2D" parent="Axis/HBoxContainer/BoardContainer/Board/BoardMapLayer"]
+unique_name_in_owner = true
+
+[node name="Pieces" type="Node2D" parent="Axis/HBoxContainer/BoardContainer/Board/BoardMapLayer"]
 unique_name_in_owner = true
 
 [node name="HellHorsePassAsk" type="PanelContainer" parent="Axis/HBoxContainer/BoardContainer"]

@@ -108,7 +108,7 @@ func check_slide_tiles_on_threat() -> bool:
 			return false
 		moved_tile_ids.append(end_of_slide_tile.id)
 	
-	var crossed_ids = moved_tile_ids.filter(func (a): return threat_tile_ids.has(a))
+	#var crossed_ids = moved_tile_ids.filter(func (a): return threat_tile_ids.has(a))
 	moved_tile_ids.sort()
 	threat_tile_ids.sort()
 	return true

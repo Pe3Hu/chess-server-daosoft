@@ -17,10 +17,10 @@ config/icon="res://assets/icon.svg"
 
 [autoload]
 
-Global="*res://entities/global/global.gd"
-FrameworkSettings="*res://entities/global/framework_settings.gd"
-MultiplayerManager="*res://entities/global/multiplayer_manager.gd"
-BoardHelper="*res://entities/global/board_helper.gd"
+Global="*res://global/global.gd"
+FrameworkSettings="*res://global/framework_settings.gd"
+MultiplayerManager="*res://global/multiplayer_manager.gd"
+BoardHelper="*res://global/board_helper.gd"
 
 [display]
 

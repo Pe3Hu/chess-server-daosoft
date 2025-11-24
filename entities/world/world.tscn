@@ -9,7 +9,6 @@ script = ExtResource("1_sbgiu")
 
 [node name="Game" parent="." node_paths=PackedStringArray("world", "cursor") instance=ExtResource("2_tytc4")]
 unique_name_in_owner = true
-visible = false
 offset_left = -360.0
 offset_right = 360.0
 world = NodePath("..")

@@ -1,3 +1,8 @@
-res://entities/world/world.tscn
+res://entities/game/game.tscn
 res://entities/global/framework_settings.gd
+res://entities/piece/piece_resource.gd
+res://entities/referee/referee.gd
+res://entities/global/multiplayer_manager.gd
 res://entities/world/world.gd
+res://entities/referee/referee.tscn
+res://global/framework_settings.gd

@@ -43,10 +43,15 @@ func start_game() -> void:
 	visible = true
 	%WhiteClock._on_switch()
 	
-func pass_turn_to_opponent() -> void:
+func pass_turn_to_opponent(is_local_: bool = true) -> void:
 	#game.board.reset_state_tiles()
 	#apply_mods()
-	resource.pass_turn_to_opponent()
+	#resource.pass_turn_to_opponent()
+	
+	if is_local_:
+		game.world.server_recive_initiative_switch.rpc_id(1)
+	
+	resource.switch_active_player()
 	
 	if !check_gameover():
 		game.board.reset_focus_tile()
@@ -95,7 +100,9 @@ func reset() -> void:
 	
 #region mod
 func apply_mods() -> void:
-	apply_void_mod()
+	
+	#if MultiplayerManager.active_color != MultiplayerManager.user_color: return
+	#apply_void_mod()
 	apply_hellhorse_mod()
 	
 func apply_void_mod() -> void:
@@ -106,16 +113,16 @@ func apply_void_mod() -> void:
 		if !escape_piece_resources.has(move_resource.captured_piece):
 			escape_piece_resources.append(move_resource.captured_piece)
 	
-	var captured_tile_ids = []
+	var fatigue_tile_ids = []
 	
 	for piece_resource in escape_piece_resources:
 		if piece_resource.failure_on_escape_trial():
 			var piece = game.board.get_piece(piece_resource)
 			piece.capture()
-			captured_tile_ids.append(piece_resource.tile.id)
+			fatigue_tile_ids.append(piece.resource.tile.id)
 	
-	print(captured_tile_ids.size())
-	game.world.users_recive_void_result(captured_tile_ids)
+	print(fatigue_tile_ids.size())
+	game.world.users_recive_void_result(fatigue_tile_ids)
 	
 func apply_hellhorse_mod() -> void:
 	if FrameworkSettings.active_mode != FrameworkSettings.ModeType.HELLHORSE: return
@@ -125,12 +132,14 @@ func apply_hellhorse_mod() -> void:
 	
 	match initiative:
 		FrameworkSettings.InitiativeType.BASIC:
-			last_move.piece.player.initiatives.push_back(FrameworkSettings.InitiativeType.HELLHORSE)
-		
-			last_move.piece.player.generate_legal_moves()
-			game.board.clear_phantom_hellhorse_captures()
+			insert_hellhorse_initiative()
 		FrameworkSettings.InitiativeType.HELLHORSE:
 			pass
+	
+func insert_hellhorse_initiative() -> void:
+	resource.active_player.initiatives.push_back(FrameworkSettings.InitiativeType.HELLHORSE)
+	resource.active_player.generate_legal_moves()
+	game.board.clear_phantom_hellhorse_captures()
 	
 func fox_mod_preparation() -> void:
 	resource.fox_swap_players.append_array(resource.players)
@@ -141,33 +150,33 @@ func fox_mod_preparation() -> void:
 	game.menu.update_bots()
 	game.board.fox_mod_tile_state_update()
 	
-func apply_opponent_spy_move() -> void:
-	var move = resource.active_player.opponent.spy_move
-	
-	if move == null: return
-	
-	if !check_spy_move_is_legal():
-		return
-	
-	move.is_postponed = false
-	
-	match move.type:
-		FrameworkSettings.MoveType.CAPTURE:
-			move.is_postponed = !check_spy_move_on_legal_capture()
-		FrameworkSettings.MoveType.PASSANT:
-			move.is_postponed = !check_spy_move_on_legal_capture()
-	
-	update_spy_move_on_slide_capture()
-	
-	game.receive_move(move)
-	var spy_piece = game.board.get_piece(move.piece)
-	
-	if move.type == FrameworkSettings.MoveType.CASTLING:
-		spy_piece.complement_castling_move(move)
-	
-	spy_piece.resource.king_unpin()
-	game.resource.recalc_piece_environment()
-	detect_spy_checkmate()
+#func apply_opponent_spy_move() -> void:
+	#var move = resource.active_player.opponent.spy_move
+	#
+	#if move == null: return
+	#
+	#if !check_spy_move_is_legal():
+		#return
+	#
+	#move.is_postponed = false
+	#
+	#match move.type:
+		#FrameworkSettings.MoveType.CAPTURE:
+			#move.is_postponed = !check_spy_move_on_legal_capture()
+		#FrameworkSettings.MoveType.PASSANT:
+			#move.is_postponed = !check_spy_move_on_legal_capture()
+	#
+	#update_spy_move_on_slide_capture()
+	#
+	#game.receive_move(move, true)
+	#var spy_piece = game.board.get_piece(move.piece)
+	#
+	#if move.type == FrameworkSettings.MoveType.CASTLING:
+		#spy_piece.complement_castling_move(move)
+	#
+	#spy_piece.resource.king_unpin()
+	#game.resource.recalc_piece_environment()
+	#detect_spy_checkmate()
 	
 func check_spy_move_is_legal() -> bool:
 	resource.active_player.find_threat_moves()
@@ -209,3 +218,4 @@ func detect_spy_checkmate() -> void:
 		resource.winner_player = resource.active_player.opponent
 		game.end()
 #endregion
+	

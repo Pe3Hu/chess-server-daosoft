@@ -74,6 +74,7 @@ func capture(source_piece_: Piece = null, _is_admin: bool = false) -> void:
 		if FrameworkSettings.active_mode == FrameworkSettings.ModeType.VOID:
 			if resource.success_on_stand_trial():
 				source_piece_.capture()
+				MultiplayerManager.is_harakiri = true
 				return
 	
 	board.resource.capture_piece(resource)
@@ -81,7 +82,8 @@ func capture(source_piece_: Piece = null, _is_admin: bool = false) -> void:
 	
 func remove_self() -> void:
 	#board.resource_to_piece.erase(resource)
-	board.pieces.remove_child(self)
+	if board.pieces.get_children().has(self):
+		board.pieces.remove_child(self)
 	queue_free()
 	
 func promotion() -> void:
