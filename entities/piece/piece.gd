@@ -10,13 +10,13 @@ var resource: PieceResource:
 		update_sprite()
 		position = Vector2(resource.tile.coord) * FrameworkSettings.TILE_SIZE
 
-@export_enum("pawn", "king", "queen", "rook", "bishop", "knight", "hellhorse") var type:
+@export_enum("pawn", "king", "queen", "rook", "bishop", "knight", "hellhorse", "infernalhorse") var type:
 	set(value_):
 		type = value_
 		
 		if color != null:
 			texture = load("res://entities/piece/images/{color}_{type}.png".format({"color": color, "type": type}))
-		if type == "hellhorse":
+		if type == "hellhorse" or type == "infernalhorse":
 			offset.y = 5
 @export_enum("black", "white") var color:
 	set(value_):

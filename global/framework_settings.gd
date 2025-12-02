@@ -18,7 +18,7 @@ extends Node
 #"RNBQKBNR/PPPP1PPP/8/8/8/8/pppp1ppp/rnbqkbnr" doubble pin test
 const DEFAULT_START_FEN: String = "RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr"
 const GAMBIT_START_FEN: String = "RNBQKQBNR/PPPPPPPPP/9/9/9/9/9/ppppppppp/rnbqkqbnr"
-const HELLHORSE_START_FEN: String = "RNBQKBHR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbhr"
+const HELLHORSE_START_FEN: String = "RIBQKBIR/PPPPPPPP/8/8/8/8/pppppppp/ribqkbir"
 #endregion
 
 #region board
@@ -59,13 +59,14 @@ const bishop_magics = [ ]# 16509839532542417919, 14391803910955204223, 184877177
 #region piece
 enum PieceType {
 	NONE = 0,
-	KING = 1,       # 00001
-	PAWN = 2,       # 00010
-	KNIGHT = 3,     # 00011
-	BISHOP = 4,     # 00100
-	ROOK = 5,       # 00101
-	QUEEN = 6,      # 00110
-	HELLHORSE = 7   # 00111
+	KING = 1,        # 00001
+	PAWN = 2,        # 00010
+	KNIGHT = 3,      # 00011
+	BISHOP = 4,      # 00100
+	ROOK = 5,        # 00101
+	QUEEN = 6,       # 00110
+	HELLHORSE = 7,   # 00111
+	INFERNALHORSE = 8# 01000
 }
 
 enum PieceColor {
@@ -94,6 +95,64 @@ const KNIGHT_DIRECTIONS = [
 	Vector2i(-1, 2),
 	Vector2i(-2, 1),
 	Vector2i(-2,-1)
+]
+
+const INFERNALHORSE_DIRECTIONS = [
+	# Ходы на 1 клетку (как король)
+	Vector2i(1, 1),
+	Vector2i(1, -1),
+	Vector2i(-1, 1),
+	Vector2i(-1, -1),
+
+	# Ходы на 2 клетки по осям
+	Vector2i(2, 0),
+	Vector2i(-2, 0),
+	Vector2i(0, 2),
+	Vector2i(0, -2),
+
+	# Ходы на 2 клетки по диагонали
+	Vector2i(2, 2),
+	Vector2i(2, -2),
+	Vector2i(-2, 2),
+	Vector2i(-2, -2),
+
+	# Комбинированные ходы (3,1)
+	Vector2i(3, 1),
+	Vector2i(3, -1),
+	Vector2i(-3, 1),
+	Vector2i(-3, -1),
+	Vector2i(1, 3),
+	Vector2i(1, -3),
+	Vector2i(-1, 3),
+	Vector2i(-1, -3),
+
+	# Удвоенные ходы коня
+	Vector2i(4, 2),
+	Vector2i(4, -2),
+	Vector2i(-4, 2),
+	Vector2i(-4, -2),
+	Vector2i(2, 4),
+	Vector2i(2, -4),
+	Vector2i(-2, 4),
+	Vector2i(-2, -4),
+
+	# Дальние ходы по осям
+	Vector2i(4, 0),
+	Vector2i(-4, 0),
+	Vector2i(0, 4),
+	Vector2i(0, -4),
+
+	# Комбинированные ходы (3,3)
+	Vector2i(3, 3),
+	Vector2i(3, -3),
+	Vector2i(-3, 3),
+	Vector2i(-3, -3),
+
+	# Максимальные удаления
+	Vector2i(4, 4),
+	Vector2i(4, -4),
+	Vector2i(-4, 4),
+	Vector2i(-4, -4)
 ]
 
 const BISHOP_DIRECTIONS = [
@@ -157,6 +216,7 @@ const symbol_to_type = {
 	"r": PieceType.ROOK,
 	"q": PieceType.QUEEN,
 	"h": PieceType.HELLHORSE,
+	"i": PieceType.INFERNALHORSE,
 }
 
 const DEFAULT_COLORS = [PieceColor.WHITE, PieceColor.BLACK]
@@ -169,7 +229,10 @@ const CLOCK_START_SEC: int = 0
 #endregion
 
 #region mode
-var active_mode: ModeType = ModeType.CLASSIC
+var active_mode: ModeType = ModeType.CLASSIC:
+	set(value_):
+		active_mode = value_
+		pass
 
 enum InitiativeType {
 	BASIC = 0,
@@ -224,4 +287,46 @@ var VOID_CHANCE_TO_ESCAPE: float = 0.05
 const GAMBIT_BOARD_SIZE: Vector2i = Vector2i(9, 9)
 const ALTAR_COORD: Vector2i = Vector2i(4, 4)
 var SACRIFICE_COUNT_FOR_VICTORY: int = 5
+#endregion
+
+#region test
+enum TestTypeParameter{
+	STAND = 0,
+	ESCAPE = 1,
+	SACRIFICE = 2,
+}
+
+const test_type_parameters = [
+	TestTypeParameter.STAND,
+	TestTypeParameter.ESCAPE,
+	TestTypeParameter.SACRIFICE,
+]
+
+func get_test_parameter_value(type_: TestTypeParameter) -> float:
+	var value: float
+	
+	match type_:
+		TestTypeParameter.STAND:
+			value = VOID_CHANCE_TO_STAND
+		TestTypeParameter.ESCAPE:
+			value = VOID_CHANCE_TO_ESCAPE
+		TestTypeParameter.SACRIFICE:
+			value = float(SACRIFICE_COUNT_FOR_VICTORY)
+	
+	return value
+	
+func set_test_parameter_value(type_: TestTypeParameter, value_: float) -> void:
+	match type_:
+		TestTypeParameter.STAND:
+			VOID_CHANCE_TO_STAND = value_
+		TestTypeParameter.ESCAPE:
+			VOID_CHANCE_TO_ESCAPE = value_
+		TestTypeParameter.SACRIFICE:
+			SACRIFICE_COUNT_FOR_VICTORY = int(value_)
+
+func reset_mode_and_test_parameters() -> void:
+	FrameworkSettings.active_mode = FrameworkSettings.ModeType.CLASSIC
+	SACRIFICE_COUNT_FOR_VICTORY = 5
+	VOID_CHANCE_TO_STAND = 0.05
+	VOID_CHANCE_TO_ESCAPE = 0.05
 #endregion

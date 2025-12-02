@@ -45,6 +45,8 @@ func get_type() -> String:
 			return "queen"
 		FrameworkSettings.PieceType.HELLHORSE:
 			return "hellhorse"
+		FrameworkSettings.PieceType.INFERNALHORSE:
+			return "infernalhorse"
 	
 	return ""
 	
@@ -70,6 +72,9 @@ func generate_moves() -> void:
 		return
 	if template.type == FrameworkSettings.PieceType.KNIGHT or template.type == FrameworkSettings.PieceType.HELLHORSE:
 		geterate_knight_moves()
+		return
+	if template.type == FrameworkSettings.PieceType.INFERNALHORSE:
+		geterate_infernalhorse_moves()
 		return
 	
 	geterate_sliding_moves()
@@ -191,6 +196,22 @@ func geterate_pawn_passant_capture_move() -> void:
 	
 func geterate_knight_moves() -> void:
 	for direction in FrameworkSettings.KNIGHT_DIRECTIONS:
+		var coord = tile.coord + direction
+		var target_tile = board.get_tile_based_on_coord(coord)
+		
+		if target_tile != null:
+			if target_tile.piece != null:
+				if target_tile.piece.template.color != template.color:
+					add_move(target_tile)
+				else:
+					assist_pieces.append(target_tile.piece)
+			else:
+				add_move(target_tile)
+	
+	update_assists()
+	
+func geterate_infernalhorse_moves() -> void:
+	for direction in FrameworkSettings.INFERNALHORSE_DIRECTIONS:
 		var coord = tile.coord + direction
 		var target_tile = board.get_tile_based_on_coord(coord)
 		

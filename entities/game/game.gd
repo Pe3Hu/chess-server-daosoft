@@ -104,6 +104,7 @@ func end() -> void:
 	for clock in referee.clocks.get_children():
 		clock.tick_timer.stop()
 	
+	
 func reset() -> void:
 	referee.reset()
 	notation.reset()
